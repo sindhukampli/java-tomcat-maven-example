@@ -39,7 +39,8 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
-                    sh "helm install tomcat-deploy-project ./helm -n d --set image.tag=${IMAGE_TAG}"
+                    sh "helm upgrade --install tomcat-deploy-project ./path-to-your-helm-chart -n d
+}"
                 }
             }
         }
