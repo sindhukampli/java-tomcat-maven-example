@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: tomcat-deploy{{ .Values.deployment.name }}
+  name: {{ .Values.deployment.name }}
   namespace: {{ .Values.namespace }}
 spec:
-  replicas: 1{{ .Values.deployment.replicaCount }}
+  replicas: {{ .Values.deployment.replicaCount }}
   selector:
     matchLabels:
-      app: tomcat{{ .Values.deployment.name }}
+      app: {{ .Values.deployment.name }}
   template:
     metadata:
       labels:
-        app: tomcat{{ .Values.deployment.name }}
+        app: {{ .Values.deployment.name }}
     spec:
       containers:
-        - name: tomcat-container{{ .Values.deployment.name }}
-          image: fatimatabassum/fatima12:IMAGE_TAG{{ .Values.image.repository }}:{{ .Values.image.tag }}
+        - name: {{ .Values.deployment.name }}
+          image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
           ports:
-            - containerPort: 8080{{ .Values.image.containerPort }}
+            - containerPort: {{ .Values.image.containerPort }}
