@@ -36,6 +36,13 @@ pipeline {
                 }
             }
         }
+     stage('Deploy Stage') {
+            steps {
+                script {
+                    sh 'helm install helm ./helm -n dev'
+                }
+            }
+        }
     }
     post {
         success {
