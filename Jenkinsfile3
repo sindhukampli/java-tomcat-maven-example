@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
-                    sh "helm install tomcat-deploy-project ./helm -n de --set image.tag=${IMAGE_TAG}"
+                    sh "helm install tomcat-deploy-project ./helm -n d --set image.tag=${IMAGE_TAG}"
                 }
             }
         }
