@@ -8,5 +8,5 @@ image:
 service:
   type: NodePort
   clusterIPPort: 8080
-  nodePort: 30400
-namespace: devvv
+  nodePort: 30300
+namespace: de
