@@ -1,28 +1,42 @@
-pipeline{
+pipeline {
     agent { label 'master' }
-    environment{
+    environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
     }
-    stages{
-       stage('Git Checkout Stage'){
-            steps{
+    stages {
+        stage('Git Checkout Stage') {
+            steps {
                 git branch: 'master', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
             }
-         }        
-        stage('Build docker Image'){
-          steps{
-            sh 'docker build -t skampli31/docker1-jenkins:IMAGE_TAG .'
-          }
         }
-        stage('Push To Dockerhub'){
-          steps{
-            sh 'docker push skampli31/docker1-jenkins:IMAGE_TAG'
-          }
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh "docker build -t skampli31/docker1-jenkins:${IMAGE_TAG} ."
+                }
+            }
+        }
+        stage('Push To Dockerhub') {
+            steps {
+                script {
+                    sh "docker push skampli31/docker1-jenkins:${IMAGE_TAG}"
+                }
+            }
         }
         stage('Deploy Stage') {
-          steps{
-            sh 'helm install helm helm -n dev'
-          } 
+            steps {
+                script {
+                    sh 'helm install helm ./helm -n dev'
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
