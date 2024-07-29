@@ -6,6 +6,6 @@ image:
   tag: IMAGE_TAG
   containerPort: 8080
 service:
-  type: ClusterIP
-  clusterIPPort: 3000
+  type: NodePort
+  clusterIPPort: 31000
 namespace: dev
