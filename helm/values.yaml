@@ -2,14 +2,23 @@ deployment:
   name: tomcat-deploy-project
   replicaCount: 1
 
+# Image configuration
 image:
   repository: 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker
   tag: 38
   containerPort: 8080
 
-namespace: d
-
+# Service configuration
 service:
-  type: NodePort
+  type: ClusterIP  # Change this to ClusterIP since Ingress will handle external access
   clusterIPPort: 8080
-  nodePort: 30700
+
+# Ingress configuration
+ingress:
+  enabled: true
+  name: tomcat-deploy-project-ingress
+  path: /
+  backendServiceName: tomcat-deploy-project-svc
+  backendServicePort: 8080
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
