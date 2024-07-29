@@ -7,5 +7,6 @@ image:
   containerPort: 8080
 service:
   type: NodePort
-  clusterIPPort: 31000
+  clusterIPPort: 8080
+  nodePort: 31000
 namespace: dev
