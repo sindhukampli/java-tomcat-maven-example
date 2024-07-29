@@ -10,7 +10,7 @@ pipeline {
     stages {
         stage('Git Checkout Stage') {
             steps {
-                git branch: 'main', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
+                git branch: 'master', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
             }
         }
         stage('Build Docker Image') {
