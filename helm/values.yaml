@@ -1,0 +1,11 @@
+deployment:
+  name: feb24--project
+  replicaCount: 1
+image:
+  repository: 227219889473.dkr.ecr.ap-south-1.amazonaws.com
+  tag: 1
+  containerPort: 3000
+service:
+  type: ClusterIP
+  clusterIPPort: 3000
+namespace: dev
