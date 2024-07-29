@@ -1,0 +1,55 @@
+pipeline {
+    agent {
+label 'docker'
+    }
+    environment {
+        ACCOUNT_ID = "654654623396"
+        REGION = "ap-south-1"
+        ECR_REPO_NAME = "jenkins-docker"
+        IMAGE_TAG = "latest"
+        REPOSITORY_URI = "${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com/${ECR_REPO_NAME}"
+    }
+    stages {
+        stage('Logging into AWS ECR') {
+            steps {
+                script {
+                    sh "aws ecr get-login-password --region ${REGION} | docker login --username AWS --password-stdin ${ACCOUNT_ID}.dkr.ecr.${REGION}.amazonaws.com"
+                }
+            }
+        }
+        stage('Checkout') {
+            steps {
+                git branch: 'main', url: 'https://github.com/sindhukampli/java-example'
+            }
+        }
+        stage('Build') {
+            steps {
+                script {
+                    sh "docker build -t ${REPOSITORY_URI}:${IMAGE_TAG} ."
+                }
+            }
+        }
+        stage('Push to ECR') {
+            steps {
+                script {
+                    sh "docker push ${REPOSITORY_URI}:${IMAGE_TAG}"
+                }
+            }
+        }
+        stage('Deploy') {
+            steps {
+                script {
+                    sh 'helm install helm ./helm -n dev'
+                }
+            }
+        }
+    }
+    post {
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
+        }
+    }
+}
