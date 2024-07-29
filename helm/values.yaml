@@ -2,7 +2,7 @@ deployment:
   name: tomcat-deploy-project
   replicaCount: 1
 image:
-  repository: fatimatabassum/fatima12
+  repository: 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker
   tag: IMAGE_TAG
   containerPort: 8080
 service:
