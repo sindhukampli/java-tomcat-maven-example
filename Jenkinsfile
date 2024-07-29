@@ -1,7 +1,7 @@
 pipeline {
     agent { label 'master' }
     environment {
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_TAG = 'latest'
         AWS_REGION = 'ap-south-1'  
         ECR_REPO_NAME = 'service-a'  
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com' 
