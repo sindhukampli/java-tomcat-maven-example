@@ -39,8 +39,8 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
-                    sh "helm upgrade --install tomcat-deploy-project ./helm -n d
-}"
+                    sh "helm upgrade --install tomcat-deploy-project ./helm -n d"
+}
                 }
             }
         }
