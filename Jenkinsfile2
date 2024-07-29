@@ -33,7 +33,7 @@ pipeline {
                         """
                         
                         // Push the Docker image to ECR
-                        sh "sudo docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
+                        sh "docker push 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker:latest"
                     }
                 }
             }
