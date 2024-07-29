@@ -1,7 +1,11 @@
 pipeline {
-    agent { label 'master' }
+    agent { label 'master' }  // Change this based on your Jenkins setup
     environment {
+        AWS_REGION = 'ap-south-1'  // Your AWS region
+        ECR_REPO_NAME = 'jenkins-docker'  // Replace with your ECR repository name
+        ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'  // Replace with your ECR registry URL
         IMAGE_TAG = "${BUILD_NUMBER}"
+        AWS_CREDENTIALS_ID = 'eks1'  // ID of your AWS credentials in Jenkins
     }
     stages {
         stage('Git Checkout Stage') {
@@ -12,21 +16,25 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "docker build -t skampli31/docker1-jenkins:${IMAGE_TAG} ."
+                    sh "docker build -t ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG} ."
                 }
             }
         }
-        stage('Push To Dockerhub') {
+        stage('Push to ECR') {
             steps {
                 script {
-                    sh "docker push skampli31/docker1-jenkins:${IMAGE_TAG}"
-                }
-            }
-        }
-        stage('Deploy Stage') {
-            steps {
-                script {
-                    sh 'helm install helm ./helm -n dev'
+                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                         credentialsId: "${AWS_CREDENTIALS_ID}", 
+                                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        
+                        // Log in to Amazon ECR
+                        sh """
+                            aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                        """
+                        
+                        // Push the Docker image to ECR
+                        sh "docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
+                    }
                 }
             }
         }
