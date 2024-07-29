@@ -5,7 +5,7 @@ pipeline {
         ECR_REPO_NAME = 'jenkins-docker'  // Replace with your ECR repository name
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'  // Replace with your ECR registry URL
         IMAGE_TAG = "${BUILD_NUMBER}"
-        AWS_CREDENTIALS_ID = 'eks1'  // ID of your AWS credentials in Jenkins
+        AWS_CREDENTIALS_ID = 'eks-ecr'  // ID of your AWS credentials in Jenkins
     }
     stages {
         stage('Git Checkout Stage') {
