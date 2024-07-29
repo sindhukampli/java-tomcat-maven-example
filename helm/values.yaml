@@ -3,7 +3,7 @@ deployment:
   replicaCount: 1
 image:
   repository: 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker
-  tag: IMAGE_TAG
+  tag: latest
   containerPort: 8080
 service:
   type: NodePort
