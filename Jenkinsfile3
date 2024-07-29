@@ -39,7 +39,7 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
-                    sh "helm upgrade --install tomcat-deploy-project ./path-to-your-helm-chart -n d
+                    sh "helm upgrade --install tomcat-deploy-project ./helm -n d
 }"
                 }
             }
