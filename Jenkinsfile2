@@ -4,7 +4,7 @@ pipeline {
         AWS_REGION = 'ap-south-1'
         ECR_REPO_NAME = 'jenkins-docker'
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'
-        IMAGE_TAG = "${BUILD_NUMBER}"
+        IMAGE_TAG = 'latest'
         AWS_CREDENTIALS_ID = 'eks-ecr'
     }
     stages {
@@ -39,7 +39,7 @@ pipeline {
      stage('Deploy Stage') {
             steps {
                 script {
-                    sh 'helm install helm ./helm -n devvv'
+                    sh 'helm install helm ./helm -n devvvv'
                 }
             }
         }
