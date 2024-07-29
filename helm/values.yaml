@@ -9,4 +9,4 @@ service:
   type: NodePort
   clusterIPPort: 8080
   nodePort: 31000
-namespace: dev
+namespace: devv
