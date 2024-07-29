@@ -7,7 +7,7 @@ pipeline {
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com' 
     }
     stages {
-        stage('Git Checkout Stage') {
+        stage('Git Checkout') {
             steps {
                 git branch: 'main', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
             }
@@ -35,10 +35,15 @@ pipeline {
             steps {
                 script {
                     sh """
-                        helm install helm ./helm -n dev
+                        helm upgrade --install service-a ./helm -n dev
                     """
                 }
             }
+        }
+    }
+    post {
+        always {
+            cleanWs()  // Clean workspace after build
         }
     }
 }
