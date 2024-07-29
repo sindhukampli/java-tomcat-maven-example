@@ -27,11 +27,12 @@ pipeline {
                                          credentialsId: "${AWS_CREDENTIALS_ID}", 
                                          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         
-                        sh '''
-                            $(aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY})
-                        '''
+                        // Log in to Amazon ECR
+                        sh """
+                            aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
+                        """
                         
-                        
+                        // Push the Docker image to ECR
                         sh "sudo docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
                     }
                 }
