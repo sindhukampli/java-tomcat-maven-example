@@ -1,6 +1,6 @@
 pipeline {
     agent {
-label 'docker'
+label 'master'
     }
     environment {
         ACCOUNT_ID = "654654623396"
