@@ -1,18 +1,17 @@
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: tomcat-ingress
-  namespace: d
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /
+  name: {{ .Values.ingress.name }}
+  namespace: {{ .Values.namespace }}
 spec:
   rules:
-    - http:
+    - host: ""  # Leave empty if not using a domain
+      http:
         paths:
-          - path: /
+          - path: {{ .Values.ingress.path }}
             pathType: Prefix
             backend:
               service:
-                name: tomcat-deploy-project-svc
+                name: {{ .Values.ingress.backendServiceName }}
                 port:
-                  number: 80
+                  number: {{ .Values.ingress.backendServicePort }}
