@@ -1,10 +1,10 @@
 deployment:
-  name: feb24--project
+  name: tomcat-deploy-project
   replicaCount: 1
 image:
-  repository: 227219889473.dkr.ecr.ap-south-1.amazonaws.com
-  tag: 1
-  containerPort: 3000
+  repository: fatimatabassum/fatima12
+  tag: IMAGE_TAG
+  containerPort: 8080
 service:
   type: ClusterIP
   clusterIPPort: 3000
