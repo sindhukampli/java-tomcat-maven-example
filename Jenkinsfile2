@@ -1,11 +1,11 @@
 pipeline {
-    agent { label 'master' }  // Change this based on your Jenkins setup
+    agent { label 'master' }
     environment {
-        AWS_REGION = 'ap-south-1'  // Your AWS region
-        ECR_REPO_NAME = 'jenkins-docker'  // Replace with your ECR repository name
-        ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'  // Replace with your ECR registry URL
+        AWS_REGION = 'ap-south-1'
+        ECR_REPO_NAME = 'jenkins-docker'
+        ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'
         IMAGE_TAG = "${BUILD_NUMBER}"
-        AWS_CREDENTIALS_ID = 'eks-ecr'  // ID of your AWS credentials in Jenkins
+        AWS_CREDENTIALS_ID = 'eks-ecr'
     }
     stages {
         stage('Git Checkout Stage') {
@@ -16,7 +16,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh "sudo docker build -t ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG} ."
+                    sh "docker build -t ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG} ."
                 }
             }
         }
@@ -27,13 +27,11 @@ pipeline {
                                          credentialsId: "${AWS_CREDENTIALS_ID}", 
                                          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         
-                        // Log in to Amazon ECR
                         sh """
                             aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
                         """
                         
-                        // Push the Docker image to ECR
-                        sh "docker push 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker:latest"
+                        sh "docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
                     }
                 }
             }
