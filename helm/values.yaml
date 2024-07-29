@@ -3,10 +3,10 @@ deployment:
   replicaCount: 1
 image:
   repository: 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker
-  tag: latest
+  tag: latest # This will be overridden by the Jenkins pipeline with the IMAGE_TAG
   containerPort: 8080
 service:
   type: NodePort
   clusterIPPort: 8080
-  nodePort: 30600
-namespace: devvvv
+  nodePort: 30400
+namespace: devvv
