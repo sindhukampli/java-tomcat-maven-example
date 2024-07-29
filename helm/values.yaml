@@ -9,4 +9,4 @@ service:
   type: NodePort
   clusterIPPort: 8080
   nodePort: 30300
-namespace: de
+namespace: d
