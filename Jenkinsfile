@@ -2,32 +2,34 @@ pipeline {
     agent { label 'master' }
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
-        AWS_REGION = 'ap-south-1'
-        ECR_REPO_NAME = 'service-a' 
-        ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com' 
+        DOCKERHUB_REPO = 'docker1-jenkins'
     }
     stages {
         stage('Git Checkout') {
             steps {
-                git branch: 'master', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
+                git branch: 'main', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    sh """
-                        aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $ECR_REGISTRY
-                        docker build -t $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG .
-                    """
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh """
+                            echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
+                            docker build -t $DOCKERHUB_REPO:$IMAGE_TAG .
+                        """
+                    }
                 }
             }
         }
-        stage('Push to ECR') {
+        stage('Push to Docker Hub') {
             steps {
                 script {
-                    sh """
-                        docker push $ECR_REGISTRY/$ECR_REPO_NAME:$IMAGE_TAG
-                    """
+                    withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials-id', usernameVariable: 'DOCKERHUB_USERNAME', passwordVariable: 'DOCKERHUB_PASSWORD')]) {
+                        sh """
+                            docker push $DOCKERHUB_REPO:$IMAGE_TAG
+                        """
+                    }
                 }
             }
         }
