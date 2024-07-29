@@ -2,33 +2,37 @@ pipeline {
     agent { label 'master' }
     environment {
         IMAGE_TAG = "${BUILD_NUMBER}"
-        DOCKERHUB_REPO = 'docker1-jenkins'
+        AWS_REGION = 'ap-south-1'  
+        ECR_REPO_NAME = 'service-a'  
+        ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com' 
+        AWS_CREDENTIALS_ID = 'eks1'  
     }
     stages {
-        stage('Git Checkout') {
+        stage('Git Checkout Stage') {
             steps {
-                git branch: 'master', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
+                git branch: 'main', url: 'https://github.com/sindhukampli/java-tomcat-maven-example.git'
             }
         }
         stage('Build Docker Image') {
             steps {
                 script {
-                    withCredentials([usernameColonPassword(credentialsId: 'docker', variable: 'docker')]) ) {
-                        sh """
-                            echo $DOCKERHUB_PASSWORD | docker login --username $DOCKERHUB_USERNAME --password-stdin
-                            docker build -t $DOCKERHUB_REPO:$IMAGE_TAG .
-                        """
-                    }
+                    sh "sudo docker build -t ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG} ."
                 }
             }
         }
-        stage('Push to Docker Hub') {
+        stage('Push to ECR') {
             steps {
                 script {
-                    withCredentials([usernameColonPassword(credentialsId: 'docker', variable: 'docker')])  {
-                        sh """
-                            docker push $DOCKERHUB_REPO:$IMAGE_TAG
-                        """
+                    withCredentials([aws(accessKeyVariable: 'AWS_ACCESS_KEY_ID', 
+                                         credentialsId: "${AWS_CREDENTIALS_ID}", 
+                                         secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
+                        
+                        sh '''
+                            $(aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY})
+                        '''
+                        
+                        
+                        sh "sudo docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
                     }
                 }
             }
@@ -36,16 +40,17 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
-                    sh """
-                        helm upgrade --install service-a ./helm -n dev
-                    """
+                    sh 'helm install helm ./helm -n dev'
                 }
             }
         }
     }
     post {
-        always {
-            cleanWs()  // Clean workspace after build
+        success {
+            echo 'Pipeline completed successfully!'
+        }
+        failure {
+            echo 'Pipeline failed!'
         }
     }
 }
