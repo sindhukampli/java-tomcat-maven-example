@@ -40,7 +40,7 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
-                    // Use the kubeconfig file from Jenkins credentials
+                    
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG_FILE')]) {
                         sh """
                             export KUBECONFIG=${KUBECONFIG_FILE}
