@@ -37,16 +37,16 @@ pipeline {
                 }
             }
         }
-       
-        stage('Deploy Tomcat') {
+        stage('Deploy Stage') {
             steps {
                 script {
                     sh "kubectl get nodes"
                     sh "helm upgrade --install tomcat-deploy-project ./helm --namespace d"
+}
                 }
             }
         }
-    }
+    
     post {
         success {
             echo 'Pipeline completed successfully!'
