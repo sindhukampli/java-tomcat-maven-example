@@ -37,16 +37,31 @@ pipeline {
                 }
             }
         }
-        stage('Deploy Stage') {
+        stage('Deploy Ingress-Nginx') {
+            steps {
+                script {
+                    sh """
+                    helm upgrade --install ingress-nginx ingress-nginx \
+                        --repo https://kubernetes.github.io/ingress-nginx \
+                        --namespace ingress-nginx --create-namespace \
+                        --set controller.service.type=LoadBalancer \
+                        --set controller.ingressClassResource.name=nginx \
+                        --set controller.ingressClassResource.controller=nginx.org/ingress-controller \
+                        --set controller.service.loadBalancerIP="" \
+                        --set controller.service.externalTrafficPolicy=Cluster
+                    """
+                }
+            }
+        }
+        stage('Deploy Tomcat') {
             steps {
                 script {
                     sh "kubectl get nodes"
                     sh "helm upgrade --install tomcat-deploy-project ./helm --namespace d"
-}
                 }
             }
         }
-    
+    }
     post {
         success {
             echo 'Pipeline completed successfully!'
