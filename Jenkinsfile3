@@ -28,9 +28,7 @@ pipeline {
                                          credentialsId: "${AWS_CREDENTIALS_ID}", 
                                          secretKeyVariable: 'AWS_SECRET_ACCESS_KEY')]) {
                         
-                        sh """
-                            aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}
-                        """
+                        sh "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REGISTRY}"
                         
                         sh "docker push ${ECR_REGISTRY}/${ECR_REPO_NAME}:${IMAGE_TAG}"
                     }
@@ -42,9 +40,7 @@ pipeline {
                 script {
                     
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG_FILE')]) {
-                        sh """
-                            helm upgrade --install tomcat-deploy-project ./helm --namespace d
-                        """
+                        sh " helm upgrade --install tomcat-deploy-project ./helm --namespace d"
                     }
                 }
             }
