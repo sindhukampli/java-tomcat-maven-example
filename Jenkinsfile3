@@ -6,7 +6,7 @@ pipeline {
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'
         IMAGE_TAG = "${BUILD_NUMBER}"
         AWS_CREDENTIALS_ID = 'eks-ecr'
-        KUBECONFIG = '/home/ubuntu/.kube/config'
+      
     }
     stages {
         stage('Git Checkout Stage') {
