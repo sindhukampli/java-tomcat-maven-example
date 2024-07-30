@@ -43,8 +43,6 @@ pipeline {
                     
                     withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG_FILE')]) {
                         sh """
-                            export KUBECONFIG=${KUBECONFIG_FILE}
-                            kubectl get nodes
                             helm upgrade --install tomcat-deploy-project ./helm --namespace d
                         """
                     }
