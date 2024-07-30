@@ -10,7 +10,7 @@ image:
   containerPort: 8080
 
 service:
-  type: ClusterIP  # ClusterIP for internal service, Ingress will handle external access
+  type: ClusterIP
   clusterIPPort: 8080
 
 ingress:
