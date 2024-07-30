@@ -10,7 +10,7 @@ image:
   containerPort: 8080
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   clusterIPPort: 8080
 
 ingress:
