@@ -1,12 +1,12 @@
 pipeline {
-    agent { label 'master' }
+    agent any
     environment {
         AWS_REGION = 'ap-south-1'
         ECR_REPO_NAME = 'jenkins-docker'
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'
         IMAGE_TAG = "${BUILD_NUMBER}"
         AWS_CREDENTIALS_ID = 'eks-ecr'
-        KUBECONFIG_ID = 'kubeconfig'  // The ID of the kubeconfig secret
+        KUBECONFIG_ID = 'kubeconfig'  
     }
     stages {
         stage('Git Checkout Stage') {
