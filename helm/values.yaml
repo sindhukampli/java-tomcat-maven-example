@@ -4,7 +4,7 @@ deployment:
 
 image:
   repository: 654654623396.dkr.ecr.ap-south-1.amazonaws.com/jenkins-docker
-  tag: 38
+  tag: BUILD_NUMBER
   containerPort: 8080
 
 service:
