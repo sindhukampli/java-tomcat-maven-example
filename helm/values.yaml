@@ -16,7 +16,7 @@ service:
 ingress:
   enabled: true
   name: tomcat-deploy-project-ingress
-  host: ""  # Leave empty if not using a domain
+  host: ""  
   path: /
   backendServiceName: tomcat-deploy-project-svc
   backendServicePort: 8080
