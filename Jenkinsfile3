@@ -6,6 +6,7 @@ pipeline {
         ECR_REGISTRY = '654654623396.dkr.ecr.ap-south-1.amazonaws.com'
         IMAGE_TAG = "${BUILD_NUMBER}"
         AWS_CREDENTIALS_ID = 'eks-ecr'
+KUBECONFIG_ID = 'kubeconfig'
       
     }
     stages {
@@ -40,6 +41,8 @@ pipeline {
         stage('Deploy Stage') {
             steps {
                 script {
+withCredentials([file(credentialsId: "${KUBECONFIG_ID}", variable: 'KUBECONFIG_FILE')]) {
+                        sh "export KUBECONFIG=${KUBECONFIG_FILE}
                     sh "kubectl get nodes"
                     sh "helm upgrade --install tomcat-deploy-project ./helm --namespace d"
 }
